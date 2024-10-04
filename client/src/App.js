@@ -12,7 +12,6 @@ function App() {
     <Header />
     <AddNewGame />
     <AllDataPrint />
-    {/* <UpdateData /> */}
     </Fragment>;
 }
 
