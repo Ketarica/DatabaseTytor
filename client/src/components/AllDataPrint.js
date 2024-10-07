@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 import UpdateData from "./UpdateData";
+import SearchGame from "./SearchGame";
 const img = require('../img/placeholderFilm.png');
 
 const AllDataPrint = () => {
     const [games, setGames] = useState([]);
-
+    const [filteredGames, setFilteredGames] = useState([]); // Состояние для отфильтрованных игр
 
     const getGames = async () => {
         try {
@@ -13,33 +14,37 @@ const AllDataPrint = () => {
             });
             const dataFormat = await serverCall.json();
             setGames(dataFormat);
+            setFilteredGames(dataFormat); // Изначально показываем все игры
         } catch (error) {
-
+            console.error(error);
         }
     };
 
     const deleteData = async (id) => {
         try {
-            const deleteGame = await fetch(`http://localhost:5000/games/${id}`, {
+            await fetch(`http://localhost:5000/games/${id}`, {
                 method: "DELETE"
             });
-            setGames(games.filter(game => game.game_id !== id)) // поиск нужного id после нажатой кнопки Удалить, что бы сразу перерисовать страницу с уже удаленным элементом.
+            setGames(games.filter(game => game.game_id !== id));
+            setFilteredGames(filteredGames.filter(game => game.game_id !== id)); // Удаляем также из отфильтрованных данных
         } catch (error) {
-
+            console.error(error);
         }
     };
 
-    useEffect(() => { getGames(); }, [])
+    useEffect(() => { getGames(); }, []);
 
     return (
         <Fragment>
-            <div className="card-list-title"> Game List: </div>
-            <div className="game-list">
+            {/* Компонент поиска */}
+            <SearchGame games={games} setFilteredGames={setFilteredGames} />
 
-                {games.map(game => (
+            <div className="card-list-title">Game List:</div>
+            <div className="game-list">
+                {filteredGames.map(game => (
                     <div className="game-item" key={game.game_id}>
                         <div className="game-details">
-                            <img className="game-img" src={img} ></img>
+                            <img className="game-img" src={img} alt="Game Poster" />
                             <p className="game-name">{game.name}</p>
                             <p className="game-score">Score: {game.score}</p>
                             <p className="game-description">{game.description}</p>
@@ -56,5 +61,6 @@ const AllDataPrint = () => {
             </div>
         </Fragment>
     );
-}
+};
+
 export default AllDataPrint;
