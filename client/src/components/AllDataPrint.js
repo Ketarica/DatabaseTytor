@@ -5,7 +5,11 @@ const img = require('../img/placeholderFilm.png');
 
 const AllDataPrint = () => {
     const [games, setGames] = useState([]);
+
     const [filteredGames, setFilteredGames] = useState([]);
+
+   
+
 
     const getGames = async () => {
         try {
@@ -14,8 +18,10 @@ const AllDataPrint = () => {
             });
             const dataFormat = await serverCall.json();
             setGames(dataFormat);
+
             setFilteredGames(dataFormat); 
         } catch (error) {
+
 
             console.error(error);
         }
@@ -23,17 +29,18 @@ const AllDataPrint = () => {
 
     const deleteData = async (id) => {
         try {
-
             await fetch(`http://localhost:5000/games/${id}`, {
                 method: "DELETE"
             });
             setGames(games.filter(game => game.game_id !== id));
+
             setFilteredGames(filteredGames.filter(game => game.game_id !== id));
         } catch (error) {
 
             console.error(error);
         }
     }
+
 
 
 useEffect(() => { getGames(); }, []);
@@ -67,3 +74,4 @@ return (
 };
 
 export default AllDataPrint;
+
