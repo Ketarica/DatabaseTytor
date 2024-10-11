@@ -14,10 +14,12 @@ const SearchGame = ({ games, setFilteredGames }) => {
 
     return (
         <div className="search-bar">
+
             <input
                 className="search-bar-text"
                 type="text"
                 placeholder="Search games..."
+
                 value={searchTerm}
                 onChange={handleSearch}
             />

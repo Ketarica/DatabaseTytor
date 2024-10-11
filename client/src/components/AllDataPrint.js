@@ -2,13 +2,17 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import UpdateData from "./UpdateData";
 import SearchGame from "./SearchGame";
+
 import BlogPage from "./BlogPage";
+
 
 const img = require('../img/placeholderFilm.png');
 
 const AllDataPrint = () => {
     const [games, setGames] = useState([]);
+
     const [filteredGames, setFilteredGames] = useState([]);
+
 
     const getGames = async () => {
         try {
@@ -17,6 +21,7 @@ const AllDataPrint = () => {
             });
             const dataFormat = await serverCall.json();
             setGames(dataFormat);
+
             setFilteredGames(dataFormat);
         } catch (error) {
 
@@ -31,12 +36,14 @@ const AllDataPrint = () => {
                 method: "DELETE"
             });
             setGames(games.filter(game => game.game_id !== id));
+
             setFilteredGames(filteredGames.filter(game => game.game_id !== id));
         } catch (error) {
 
             console.error(error);
         }
     }
+
 
 
     useEffect(() => { getGames(); }, []);
@@ -75,3 +82,4 @@ const AllDataPrint = () => {
 };
 
 export default AllDataPrint;
+
