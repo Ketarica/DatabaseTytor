@@ -264,3 +264,24 @@ body {
   height: 70px;
   font-size: 25px;
 }
+
+.search-bar {
+  margin-top: 50px;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  
+}
+
+.search-bar-text {
+  padding: 15px;
+  border: 1px solid #bdbdbd73;
+  box-shadow: 0 2px 5px rgba(99, 98, 98, 0.1);
+  color:#f9f9f9;
+  height: 50px;
+  background-color: #1f2534;
+  border-radius: 5px;
+  font-size: 40px;
+}
