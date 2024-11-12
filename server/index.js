@@ -4,15 +4,77 @@ const port = 5000
 const cors = require("cors");
 const pool = require("./db")
 
+const multer = require("multer");
+const path = require("path");
+
 app.use(cors());
 app.use(express.json());
 
 
-app.post("/games", async (req, res) => {
-    const { name, description, score, release } = req.body;
-    const newGame = await pool.query("INSERT INTO games (name, description, score, release) VALUES($1, $2, $3, $4) RETURNING *", [name, description, score, release]);
-    res.json(newGame.rows[0])
-})
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/images/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+app.use(express.static(path.join(__dirname, 'public')));
+
+const upload = multer({ storage: storage })
+
+// app.get("/gam", async (req, res) => {
+//     res.json("wrpokwr3");
+// })
+
+
+app.post("/games/:id/upload", upload.single('image'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const imageUrl = `/images/${path.basename(req.file.path)}`;
+        await pool.query(
+            "UPDATE games SET img = $1 WHERE game_id = $2 RETURNING *",
+            [imageUrl, id]
+        );
+        // res.json(newGame.rows[0]);
+        res.json({ img: imageUrl });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+app.post("/games", upload.single('image'), async (req, res) => {
+    try {
+        const { name, description, score, release } = req.body;
+        const imageUrl = req.file ? `/images/${path.basename(req.file.path)}` : null;
+        const newGame = await pool.query(
+            "INSERT INTO games (name, description, score, release) VALUES ($1, $2, $3, $4) RETURNING *",
+            [name, description, score, release]
+            // [name, description, score, release, imageUrl]
+        );
+        res.json(newGame.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// app.post("/games", upload.single('image'), async (req, res) => {
+//     try {
+//         const { name, description, score, release } = req.body;
+//         const imageUrl = `/images/${path.basename(req.file.path)}`;
+//         const newGame = await pool.query(
+//             "INSERT INTO games (name, description, score, release, img) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+//             [name, description, score, release, imageUrl]
+//         );
+//         res.json(newGame.rows[0]);
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send("Server Error");
+//     }
+// });
+
 
 
 app.get("/games", async (req, res) => {

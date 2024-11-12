@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-const img = require('../img/placeholderFilm.png');
+import React, { Fragment, useState } from "react";
+require('../img/placeholderFilm.png');
 
 const UpdateData = ({ games }) => {
 
@@ -24,7 +24,7 @@ const UpdateData = ({ games }) => {
         e.preventDefault();
         try {
             const body = { name, description, score, release };
-            const sendGame = await fetch(`http://localhost:5000/games/${games.game_id}`, {
+            await fetch(`http://localhost:5000/games/${games.game_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
@@ -43,6 +43,9 @@ const UpdateData = ({ games }) => {
             {ModalOpen && (
                 <div className="modal">
                     <div className="modal-content">
+                    {/* <GameForm
+                                gameId={game.game_id}
+                                onImageUpload={(newImageUrl) => handleImageUpload(game.game_id, newImageUrl)} /> */}
                         <button className="close" onClick={closeModal}> Close edit form</button>
                         <h2 className="modal-subtitle">Edit Game Data</h2>
                         <form className="modal-form">
@@ -85,9 +88,5 @@ const UpdateData = ({ games }) => {
             )}
         </Fragment>
     );
-
-
-
-
 }
 export default UpdateData;
