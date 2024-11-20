@@ -37,7 +37,9 @@ const UpdateData = ({ games }) => {
     const EditForm = async (e) => {
         e.preventDefault();
         try {
+
             const body = { name, description, score, release, img: imageUrl };
+
             await fetch(`http://localhost:5000/games/${games.game_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -57,9 +59,11 @@ const UpdateData = ({ games }) => {
             {ModalOpen && (
                 <div className="modal">
                     <div className="modal-content">
+
                         <button className="close" onClick={closeModal}>
                             Close edit form
                         </button>
+
                         <h2 className="modal-subtitle">Edit Game Data</h2>
                         <form className="modal-form">
                             <h2 className="name-title">Name</h2>
@@ -123,6 +127,6 @@ const UpdateData = ({ games }) => {
             )}
         </Fragment>
     );
-};
-
+}
 export default UpdateData;
+

@@ -23,9 +23,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const upload = multer({ storage: storage })
 
+
 // app.get("/gam", async (req, res) => {
 //     res.json("wrpokwr3");
 // })
+
 
 
 app.post("/games/:id/upload", upload.single('image'), async (req, res) => {
@@ -51,7 +53,9 @@ app.post("/games", upload.single('image'), async (req, res) => {
         const newGame = await pool.query(
             "INSERT INTO games (name, description, score, release) VALUES ($1, $2, $3, $4) RETURNING *",
             [name, description, score, release]
+
             // [name, description, score, release, imageUrl]
+
         );
         res.json(newGame.rows[0]);
     } catch (err) {
@@ -59,6 +63,7 @@ app.post("/games", upload.single('image'), async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
 
 // app.post("/games", upload.single('image'), async (req, res) => {
 //     try {
@@ -74,6 +79,7 @@ app.post("/games", upload.single('image'), async (req, res) => {
 //         res.status(500).send("Server Error");
 //     }
 // });
+
 
 
 
