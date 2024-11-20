@@ -30,6 +30,7 @@ const AllDataPrint = () => {
         }
     };
 
+
     const handleImageUpload = (gameId, newImageUrl) => {
 
         setGames(games.map(game =>
@@ -39,6 +40,7 @@ const AllDataPrint = () => {
             game.game_id === gameId ? { ...game, img: newImageUrl } : game
         ));
     };
+
 
     useEffect(() => { getGames(); }, []);
 
@@ -54,10 +56,13 @@ const AllDataPrint = () => {
                     <div className="game-item" key={game.game_id}>
                         <div className="game-details">
                             <img
-                                src={game.img ? `http://localhost:5000/${game.img}` : imgPlaceholder}
+
+                                src={game.img ? `http://localhost:5000${game.img}` : imgPlaceholder}
                                 alt="Game Poster"
                                 className="game-img"
-                                style={{  width: '200px', height: '300px', maxWidth: '200px', maxHeight: '300px' }}
+                                style={{ width: '200px', height: '300px', maxWidth: '200px', maxHeight: '300px' }}
+
+
                             />
                             <p className="game-name">{game.name}</p>
                             <p className="game-score">Score: {game.score}</p>
@@ -66,10 +71,9 @@ const AllDataPrint = () => {
 
                         </div>
                         <div className="update-module">
-                            <GameForm
-                                gameId={game.game_id}
-                                onImageUpload={(newImageUrl) => handleImageUpload(game.game_id, newImageUrl)} />
-                            <UpdateData games={game} id={game.game_id} />
+
+                            <UpdateData games={game} />
+
                         </div>
                         <button className="delete-button" onClick={() => deleteData(game.game_id)}>
                             Delete
@@ -82,4 +86,3 @@ const AllDataPrint = () => {
 };
 
 export default AllDataPrint;
-
